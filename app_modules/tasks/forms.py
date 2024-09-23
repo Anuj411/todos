@@ -22,7 +22,7 @@ class UpdateTaskForm(forms.ModelForm):
 
     class Meta:
         model = Task
-        fields = "__all__"
+        fields = ("title", "description", "due_date", "status")
         widgets={
             'due_date' : forms.TextInput(attrs={'type':'date'})
         }

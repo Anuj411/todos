@@ -62,5 +62,5 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["object_list"] = Task.objects.all()
+        context["object_list"] = Task.objects.filter(created_by = self.request.user)
         return context

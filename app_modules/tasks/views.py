@@ -1,3 +1,5 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.views.generic import CreateView, UpdateView, ListView, View
 from .forms import CreateTaskForm, UpdateTaskForm
@@ -12,6 +14,11 @@ class ListTaskView(LoginRequiredMixin, ListView):
     model = Task
     template_name = "tasks/list-task.html"
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(created_by = self.request.user)
+        return queryset
+
 
 class CreateTaskView(LoginRequiredMixin, CreateView):
     template_name = "tasks/create-task.html"
@@ -19,6 +26,7 @@ class CreateTaskView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         instance = form.save(commit=False)
+        instance.created_by = self.request.user
         instance.save()
         return HttpResponseRedirect(reverse("tasks:list_task"))
 

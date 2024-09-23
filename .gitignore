@@ -42,3 +42,6 @@ media/
 Pipfile
 Pipfile.lock
 migrations/
+
+
+user_activity.log
