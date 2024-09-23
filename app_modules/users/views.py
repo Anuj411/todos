@@ -7,6 +7,8 @@ from django.contrib.auth import authenticate, login, logout
 from app_modules.tasks.models import Task
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from datetime import datetime
+
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
@@ -43,7 +45,11 @@ class RegisterView(CreateView):
     form_class = RegisterForm
 
     def form_valid(self, form):
+        email = form.cleaned_data["email"]
+        today_date = datetime.today().date()
         instance = form.save(commit=False)
+
+        instance.username = email.split("@")[0] + str(today_date.day) + str(today_date.month) + str(today_date.year)
         instance.save()
         return HttpResponseRedirect(reverse("users:login"))
 
